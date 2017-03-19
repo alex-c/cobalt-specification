@@ -492,12 +492,12 @@
 					<div class="subsection" id="section-5.3">
 						<div class="subsection-header">5.3. Scope</div>
 						<div class="subsection-body">
-							<p>When a variable is declared, it is declared inside the local scope. It will not be accessible from superordinate scopes. If a variable of the same name is declared in a superordinate scope, the local variable will overshadow the variable of the superordinate scope. Two variables of the same name can therefore exist in different hierarchical scopes, and hold different values.</p>
-							<p>A Cobalt program constitutes a "global" scope. It can have subordinate scopes.</p>
+							<p>When a variable is declared, it is declared inside the local scope. It will not be accessible from superordinate scopes. If a variable of the same name is declared in a superordinate scope, the local variable will overshadow the variable of the superordinate scope. Two variables of the same name can therefore exist in different hierarchical scopes, and hold different values. A variable can't be declared, if a variable of the same name has already been declared in the local scope.</p>
+							<p>A Cobalt program constitutes a "program scope". It can have subordinate scopes.</p>
 							<div class="subsection-box subsection-box-info">
 								<div class="subsection-box-header"><span class="glyphicon glyphicon-info-sign"></span> Scopes in Cobalt 0.1</div>
 								<div class="subsection-box-body">
-									<p>Note that there are no scope-creating statements or language constructs in this version of Cobalt yet. There is therefore only one, the global, scope.</p>
+									<p>Note that there are no scope-creating statements or language constructs in this version of Cobalt yet. There is therefore only one scope, the program scope.</p>
 								</div>
 							</div>
 						</div>
@@ -505,8 +505,8 @@
 					<div class="subsection" id="section-5.4">
 						<div class="subsection-header">5.4. Usage</div>
 						<div class="subsection-body">
-							<p>A variable needs to be declared in the local or a superordinate scope in order to be used. When a variable is used, it will first be looked up in the local scope. If no variable of that name exists in the checked scope, it will be looked up in the next superordinate scope, until the global program scope is reached. If it is not found at all, compilation will fail.</p>
-							<p>A variable needs to be assigned a value in order to be used. When attempting to use a variable that has no assigned value, compilation whill fail.</p>
+							<p>A variable needs to be declared in the local or a superordinate scope in order to be used. When a variable is used, it will first be looked up in the local scope. If no variable of that name exists in the checked scope, it will be looked up in the next superordinate scope, until the program scope is reached. If it is not found at all, compilation will fail.</p>
+							<p>A variable needs to be assigned a value in order to be used. When attempting to use a variable that has no assigned value, compilation whill fail with a reference error.</p>
 						</div>
 					</div>
 				</div>
