@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+
+<html xmlns="http://www.w3.org/TR/xhtml1/strict" >
+<head>
+	<title>Cobalt Language Specification</title>
+	<meta charset="utf-8"/>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/shCore.js"></script>
+	<script type="text/javascript" src="js/shBrush.js"></script>
+	<script type="text/javascript" src="js/shBrushEBNF.js"></script>
+	<link rel="stylesheet" href="style/bootstrap.min.css" />
+	<link rel="stylesheet" href="style/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="style/shCore.css" />
+	<link rel="stylesheet" href="style/shThemeDefault.css" />
+	<link rel="stylesheet" href="style/page.css" />
+	<script type="text/javascript">
+		$(function() {
+			$('#index-body').height(window.innerHeight-$('#index-header').height()-64);
+			SyntaxHighlighter.all()
+		});
+	</script>
+</head>
+<body>
+
+	<div id="container">
+
+		<div id="index">
+			<div id="index-header">
+				<h1>Cobalt Language Specification</h1>
+				<p>Cobalt version 0.1</p>
+				<p>Specification version 0.1.0 <i>(19. March 2017)</i></p>
+			</div>
+			<div id="index-body">
+				<div class="index-entry"><a href="#introduction">Introduction</a></div>
+				<div class="index-entry"><a href="#section-1">1. Lexical Structure</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.1">1.1. Unicode</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.2">1.2. Line Termination</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.3">1.3. Whitespace</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.4">1.4. Case Sensitivity</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.5">1.5. Comments</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-1.6">1.6. Identifiers</a></div>
+				<div class="index-entry"><a href="#section-2">2. Primitive Types and Values</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-2.1">2.1. The Boolean Type</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-2.2">2.2. The Integer Type</a></div>
+				<div class="index-entry"><a href="#section-3">3. Operators</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-3.1">3.1. Logical Operators</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-3.2">3.2. Comparison Operators</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-3.3">3.3. Arithmetic Operators</a></div>
+				<div class="index-entry"><a href="#section-4">4. Expressions</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-4.1">4.1. Operator Precedence</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-4.2">4.2. Expression Type</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-4.3">4.3. Evaluation</a></div>
+				<div class="index-entry"><a href="#section-5">5. Variables</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-5.1">5.1. Declaration</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-5.2">5.2. Assignment</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-5.3">5.3. Scope</a></div>
+				<div class="index-entry index-entry-indent-1"><a href="#section-5.4">5.4. Usage</a></div>
+				<div class="index-entry"><a href="#section-6">6. Output</a></div>
+				<div class="index-entry"><a href="#appendix-1">Appendix I - Full Grammar</a></div>
+				<div class="index-entry"><a href="#section-3"></a></div>
+				<div class="index-entry"><a href="#section-3"></a></div>
+				<div class="index-entry"><a href="#section-3"></a></div>
+				<div class="index-entry"><a href="#section-3"></a></div>
+			</div>
+		</div>
+
+		<div id="content">
+
+			<div class="section" id="introduction">
+				<div class="section-header">Introduction</div>
+				<div class="section-body">
+					<p>Cobalt is a statically and strongly typed programming language, that uses type inference in some cases. I created it purely for learning purposes, and do not claim it to be good or useful in any respect, nor does it solve any problems that other languages don't. Cobalt is an experiment, with the main goal of writing a compiler for it.</p>
+					<h4>State of the language</h4>
+					<p>Cobalt is currently being developed. Until the first full language version is finalized as version 1.0, features will be incrementally added with a 0.x version numbering. Reverse compatibility between these versions will not be guaranteed.</p>
+					<h4>Features</h4>
+					<p>As of version 0.1, Cobalt has the following features:
+						<ul>
+							<li>Integers and booleans</li>
+							<li>Varibales</li>
+							<li>Logical, comparison and arithmetic operators</li>
+							<li>Expressions</li>
+							<li>Rudimentary console output</li>
+						</ul>
+					</p>
+					<h4>A look ahead</h4>
+					<p>Although this is subject to change, the goal for Cobalt 1.0 is to have the following features:
+						<ul>
+							<li>Floating point numbers</li>
+							<li>Conditional statements</li>
+							<li>Functions</li>
+							<li>Loops</li>
+							<li>Lists</li>
+							<li>Strings</li>
+							<li>Simple console input</li>
+							<li>Structured data - defining of new types, maybe similar to a C struct</li>
+						</ul>
+					</p>
+					<div class="subsection-box subsection-box-info">
+						<div class="subsection-box-header"><span class="glyphicon glyphicon-info-sign"></span> Grammar Definitions</div>
+						<div class="subsection-box-body">
+							<p>In order to define the lexical and syntactic structure of a Cobalt program, context-free grammar definitions are given throughout this specification. Those definitions are written in the <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form">Extended Backus-Naur Form</a>. You can find a full grammar definition in the <a href="#appendix-1">Appendix I - Full Grammar</a>.</p>
+						</div>
+					</div>
+				</div>
+				<div class="section-footer">
+					// <a href="#introduction">Introduction</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-1">
+				<div class="section-header">1. Lexical Structure</div>
+				<div class="section-body">
+					<div class="subsection" id="section-1.1">
+						<div class="subsection-header">1.1. Unicode</div>
+						<div class="subsection-body">
+							<p>Programs are written using the Unicode character set. All keywords, separators, operators, identifiers and primtive literals are formed from ASCII characters. Comments can contain non-ASCII Unicode characters.</p>
+						</div>
+					</div>
+					<div class="subsection" id="section-1.2">
+						<div class="subsection-header">1.2. Line Termination</div>
+						<div class="subsection-body">
+							<p>Line terminators can be the ASCII <code>LF</code> character, the ASCII <code>CR</code> character, or the ASCII <code>CR</code> character followed by the ASCII <code>LF</code> character. The <code>CR LF</code> combination is counted as one line terminator.</p>
+						</div>
+					</div>
+					<div class="subsection" id="section-1.3">
+						<div class="subsection-header">1.3. Whitespace</div>
+						<div class="subsection-body">
+							<p>Space and horizontal tab (ASCII characters <code>SP</code> and <code>HT</code>) are considered whitespace, and are of no consequence, except as delimiters to certain keywords.</p>
+						</div>
+					</div>
+					<div class="subsection" id="section-1.4">
+						<div class="subsection-header">1.4. Case Sensitivity</div>
+						<div class="subsection-body">
+							<p>Cobalt is case-sensitive in all aspects.</p>
+						</div>
+					</div>
+					<div class="subsection" id="section-1.5">
+						<div class="subsection-header">1.5. Comments</div>
+						<div class="subsection-body">
+							<p>Cobalt has end of line comments: All the text from the ASCII characters <code>//</code> to the end of the line is ignored.</p>
+						</div>
+					</div>
+					<div class="subsection">
+						<div class="subsection-header">1.6. Identifiers</div>
+						<div class="subsection-body">
+							<p>Identifiers can contain any letter (a-z and A-Z / ASCII codes 97-122 and 65-90) or digit (0-9 / ASCII codes 48 to 57), as well as underscores (_ / ASCII code 95), but have to start with a letter:</p>
+							<pre class="brush:ebnf">
+								identifier = letter, { letter | digit | "_" } ;
+								letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+								       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+								       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+								       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+								       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+								       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+								       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+								       | "x" | "y" | "z" ;
+								digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;</pre>
+						</div>
+					</div>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-1">1. Lexical Structure</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-2">
+				<div class="section-header">2. Types and Values</div>
+				<div class="section-body">
+					<div class="subsection" id="section-2.1">
+						<div class="subsection-header">2.1. The Boolean Type</div>
+						<div class="subsection-body">
+							<p>The boolean type is specified by using the <code>bool</code> keyword.</p>
+							<p>Boolean values can be <code>true</code> or <code>false</code>.</p>
+						</div>
+					</div>
+					<div class="subsection" id="section-2.2">
+						<div class="subsection-header">2.2. The Integer Type</div>
+						<div class="subsection-body">
+							<p>The integer type is specified by using the <code>int</code> keyword.</p>
+							<p>Integer values are 32-bit signed two's-complement integers: -2147483648 to 2147483647, inclusive.</p>
+							<p>The minus sign for negative integers is written with the <code>~</code> tilde.</p>
+						</div>
+					</div>
+					<div class="section-separator"></div>
+					<p>Grammar:</p>
+					<pre class="brush:ebnf">
+						literal = integer | "true" | "false" ;
+						integer = ["~"] , digit , { digit } ;</pre>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-2">2. Types and Values</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-3">
+				<div class="section-header">3. Operators</div>
+				<div class="section-body">
+					<p>Cobalt has infix operators, meaning that operators are placed between operands. Cobalt has unary and binary operators.</p>
+					<div class="subsection" id="section-3.1">
+						<div class="subsection-header">3.1. Logical Operators</div>
+						<div class="subsection-body">
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Unary Operator</th>
+										<th>Operand Type</th>
+										<th>Evaluates to Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>!</code></td>
+										<td><code>bool</code></td>
+										<td><code>bool</code></td>
+										<td>Logical negation.</td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Binary Operators</th>
+										<th>Operand Type</th>
+										<th>Evaluates to Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>&</code></td>
+										<td><code>bool * bool</code></td>
+										<td><code>bool</code></td>
+										<td>Logical and.</td>
+									</tr>
+									<tr>
+										<td><code>|</code></td>
+										<td><code>bool * bool</code></td>
+										<td><code>bool</code></td>
+										<td>Logical or.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="subsection" id="section-3.2">
+						<div class="subsection-header">3.2. Comparison Operators</div>
+						<div class="subsection-body">
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Binary Operators</th>
+										<th>Operand Type</th>
+										<th>Evaluates to Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>==</code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks for equality.</td>
+									</tr>
+									<tr>
+										<td><code>!=</code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks for inequality.</td>
+									</tr>
+									<tr>
+										<td><code>></code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks weather the left operand is greater than the right operand.</td>
+									</tr>
+									<tr>
+										<td><code><</code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks weather the left operand is less than the right operand.</td>
+									</tr>
+									<tr>
+										<td><code>>=</code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks weather the left operand is greater or equal to the right operand.</td>
+									</tr>
+									<tr>
+										<td><code><=</code></td>
+										<td><code>int * int</code></td>
+										<td><code>bool</code></td>
+										<td>Compares integers, checks weather the left operand is less or equal to the right operand.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="subsection" id="section-3.3">
+						<div class="subsection-header">3.3. Arithmetic Operators</div>
+						<div class="subsection-body">
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Unary Operator</th>
+										<th>Operand Type</th>
+										<th>Evaluates to Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>~</code></td>
+										<td><code>int</code></td>
+										<td><code>int</code></td>
+										<td>Minus sign for negative integers (called a tilde).</td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Binary Operators</th>
+										<th>Operand Type</th>
+										<th>Evaluates to Type</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>+</code></td>
+										<td><code>int * int</code></td>
+										<td><code>int</code></td>
+										<td>Addition.</td>
+									</tr>
+									<tr>
+										<td><code>-</code></td>
+										<td><code>int * int</code></td>
+										<td><code>int</code></td>
+										<td>Substraction.</td>
+									</tr>
+									<tr>
+										<td><code>*</code></td>
+										<td><code>int * int</code></td>
+										<td><code>int</code></td>
+										<td>Multiplication.</td>
+									</tr>
+									<tr>
+										<td><code>/</code></td>
+										<td><code>int * int</code></td>
+										<td><code>int</code></td>
+										<td>Division. Since Cobalt 0.1 does not support floating point numbers, <code>/</code> performs euclidean division.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-3">3. Operators</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-4">
+				<div class="section-header">4. Expressions</div>
+				<div class="section-body">
+					<p>Expressions can contain values in the form of literals or variable identifiers, operators and parentheses.</p>
+					<div class="subsection" id="section-4.1">
+						<div class="subsection-header">4.1. Operator Precedence</div>
+						<div class="subsection-body">
+							<p>Operators in order of highest to lowest precedence:</p>
+							<table class="table table-bordered table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th>Operator Type</th>
+										<th>Operators</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>negative number sign</td>
+										<td><code>~</code></td>
+									</tr>
+									<tr>
+										<td>multiplicative arithmetic</td>
+										<td><code>*</code>, <code>/</code></td>
+									</tr>
+									<tr>
+										<td>additive arithmetic</td>
+										<td><code>+</code>, <code>-</code></td>
+									</tr>
+									<tr>
+										<td>comparison/td>
+										<td><code>==</code>, <code>!=</code>, <code>></code>, <code>>=</code>, <code><</code>, <code><=</code></td>
+									</tr>
+									<tr>
+										<td>unary logical</td>
+										<td><code>!</code></td>
+									</tr>
+									<tr>
+										<td>binary logical</td>
+										<td><code>&</code>, <code>|</code></td>
+									</tr>
+								</tbody>
+							</table>
+							<p>Parentheses can used to change precedence.</p>
+							<p>Example:</p>
+							<pre class="brush:temp">
+								def x:int = 3 + 4 * 4;   //is the same as 3+(4*4) =19
+								def y:int = (3 + 4) * 4; // =28</pre>
+						</div>
+						<div class="subsection" id="section-4.2">
+							<div class="subsection-header">4.2. Expression Type</div>
+							<div class="subsection-body">
+								<p>An expression evaluates to a single type and value. The type it the result type of the lowest precedence operator in the main expression. When representing an expression as a tree, the expression type is the result type of the operator at the tree root.</p>
+							</div>
+						</div>
+						<div class="subsection" id="section-4.3">
+							<div class="subsection-header">4.3. Evaluation</div>
+							<div class="subsection-body">
+								<p>When an expression of the form <code>operand operator operand</code> is evaluated, the left operand is evaluated first, then the right one, and finally the whole expression is evaluated.</p>
+							</div>
+						</div>
+					</div>
+					<div class="section-separator"></div>
+					<p>Grammar:</p>
+					<pre class="brush:ebnf">
+						expression = ["!"] , term { ("&" | "|") , ["!"] , term } ;
+						term = sum { comparison operator , sum } ;
+						sum = product { ("+" | "-") , product } ;
+						product = factor { ("*" | "/") , factor } ;
+						factor = literal | identifier | "(" expression ")" ;</pre>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-4">4. Expressions</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-5">
+				<div class="section-header">5. Variables</div>
+				<div class="section-body">
+					<div class="subsection" id="section-5.1">
+						<div class="subsection-header">5.1. Declaration</div>
+						<div class="subsection-body">
+							<p>Variables are declared using the <code>def</code> definition keyword, followed by an identifier, the <code>:</code> type setting operator and optionally a type keyword. This can optionally be followed by the <code>=</code> assignement operator and an expression. The statement is then closed wiht a semicolon.</p>
+							<pre class="brush:ebnf">variable declaration = "def" , identifier , ":" , (type [, "=" , expression] | "=" , expression) , ";" ;</pre>
+							<h4>Variable Type</h4>
+							<p>A variable always has an associated type, which is determined at declaration. The variable type can be explicitely declared with a type keyword, or inferred from an assigned expression. In the case of inference, the type of the expression is first determined, and then assigned to the variable. For more information on expression type, check <a href="#section-4">4. Expressions</a>.</p>
+							<p>Explicit type declaration examples:</p>
+							<pre class="brush:temp">
+								def x:int;
+								def y:int = 3;
+								def real:bool;
+								def fake:bool = true;</pre>
+							<p>Inference examples:</p>
+							<pre class="brush:temp">
+								def thisIsAnInt := 5+5;     //x is of type int
+								def thisIsABool := 5 > x;   //bigger is of type bool</pre>
+							<div class="subsection-box subsection-box-warning">
+								<div class="subsection-box-header"><span class="glyphicon glyphicon-warning-sign"></span> Type Missmatch</div>
+								<div class="subsection-box-body">
+									<p>If the explicitely declared type and the type of the assigned expression do not match, compilation will fail with a type error.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="subsection" id="section-5.2">
+						<div class="subsection-header">5.2. Assignment</div>
+						<div class="subsection-body">
+							<p>An already declared variable ca be assigned a value. If the variable already had a value, it is replaced. An assignment starts with the variable name, followed by the <code>:=</code> assignment operator and an expression.</p>
+							<pre class="brush:ebnf">assignment = identifier , ":=" , expression , ";" ;</pre>
+							<p>Example:</p>
+							<pre class="brush:temp">
+								def x := 5+5; //x holds 10
+								x = 5;        //x now holds 5</pre>
+							<div class="subsection-box subsection-box-warning">
+								<div class="subsection-box-header"><span class="glyphicon glyphicon-warning-sign"></span> Type Missmatch</div>
+								<div class="subsection-box-body">
+									<p>If the variable type and the type of the assigned expression do not match, compilation will fail with a type error.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="subsection" id="section-5.3">
+						<div class="subsection-header">5.3. Scope</div>
+						<div class="subsection-body">
+							<p>When a variable is declared, it is declared inside the local scope. It will not be accessible from superordinate scopes. If a variable of the same name is declared in a superordinate scope, the local variable will overshadow the variable of the superordinate scope. Two variables of the same name can therefore exist in different hierarchical scopes, and hold different values.</p>
+							<p>A Cobalt program constitutes a "global" scope. It can have subordinate scopes.</p>
+							<div class="subsection-box subsection-box-info">
+								<div class="subsection-box-header"><span class="glyphicon glyphicon-info-sign"></span> Scopes in Cobalt 0.1</div>
+								<div class="subsection-box-body">
+									<p>Note that there are no scope-creating statements or language constructs in this version of Cobalt yet. There is therefore only one, the global, scope.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="subsection" id="section-5.4">
+						<div class="subsection-header">5.4. Usage</div>
+						<div class="subsection-body">
+							<p>A variable needs to be declared in the local or a superordinate scope in order to be used. When a variable is used, it will first be looked up in the local scope. If no variable of that name exists in the checked scope, it will be looked up in the next superordinate scope, until the global program scope is reached. If it is not found at all, compilation will fail.</p>
+							<p>A variable needs to be assigned a value in order to be used. When attempting to use a variable that has no assigned value, compilation whill fail.</p>
+						</div>
+					</div>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-5">5. Variable Declarations</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="section-6">
+				<div class="section-header">6. Output</div>
+				<div class="section-body">
+					<p>Cobalt 0.1 has an output statement to perform simple console output:</p>
+					<pre class="brush:ebnf">
+						output = "print" , expression , ";" ;</pre>
+					<p>The expression is evaluated, and the result is printed to the console.</p>
+				</div>
+				<div class="section-footer">
+					// <a href="#section-6">6. Output</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+			<div class="section" id="appendix-1">
+				<div class="section-header">Appendix I - Full Grammar</div>
+				<div class="section-body">
+					<p>Here is the full EBNF grammar for Cobalt 0.1:</p>
+					<pre class="brush:ebnf">
+						program = { statement } ;
+
+						statement = variable declaration | assignment | output ;
+
+						variable declaration = "def" , identifier , ":" , (type [, "=" , expression] | "=" , expression) , ";" ;
+						assignment = identifier , ":=" , expression , ";" ;
+						output = "print" , expression , ";" ;
+
+						expression = ["!"] , term { ("&" | "|") , ["!"] , term } ;
+						term = sum { comparison operator , sum } ;
+						sum = product { ("+" | "-") , product } ;
+						product = factor { ("*" | "/") , factor } ;
+						factor = literal | identifier | "(" expression ")" ;
+						comparison operator = "==" | "!=" | ">" | "<" | ">=" | "<=";
+
+						identifier = letter, { letter | digit | "_" } ;
+						type = "int" | "bool" ;
+
+						literal = integer | "true" | "false" ;
+						integer = ["~"] , digit , { digit } ;
+						letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+						       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+						       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+						       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+						       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+						       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+						       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+						       | "x" | "y" | "z" ;
+						digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;</pre>
+				</div>
+				<div class="section-footer">
+					// <a href="#appendix-1">Appendix I - Full Grammar</a>
+					<a class="section-footer-right" href="#container">back to top</a>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+</body>
+</html>
