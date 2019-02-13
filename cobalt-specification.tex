@@ -1,0 +1,312 @@
+\documentclass[a4paper,appendixprefix]{scrreprt}
+\usepackage[titletoc,title]{appendix}
+\usepackage{array}
+
+% --- Formatting ---
+
+% Formatting: General
+\usepackage{color}
+
+% Formatting: Links
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+% Formatting: Title font
+\setkomafont{disposition}{\normalcolor\bfseries}
+
+% Formatting: Chapter titles
+\usepackage{titlesec}
+\titleformat{\chapter}{\huge\normalfont\bfseries}{\thechapter.}{1em}{}
+
+% Formatting: Code
+\usepackage{listings}
+\lstset{
+  basicstyle=\fontfamily{lmvtt}\selectfont\footnotesize,
+  frame=single,
+  rulecolor=\color{black},
+  captionpos=b,
+  numbers=left
+}
+
+% Formatting: Tables
+\usepackage{tabularx}
+
+% --- Title ---
+
+\title{Cobalt Specification}
+\subtitle{Version 0.1.0-alpha}
+\author{Alexandre Charoy}
+\date{07.02.2019}
+
+% --- Document Body ---
+
+\begin{document}
+\maketitle
+
+\chapter{Introduction}
+
+\section{Target Platform}
+Cobalt is not designed for a specific target platform.
+
+\section{Grammars}
+In order to define the lexical and syntactic structure of a Cobalt program, context-free grammar definitions are given throughout this specification. Those definitions are written in the \href{https://en.wikipedia.org/wiki/Extended_Backus-Naur_form}{Extended Backus-Naur Form}. You can find a full grammar definition in \ref{app:fullgrammar}.
+
+\chapter{Lexical Structure}
+
+\section{Unicode}
+Cobalt programs are written using the Unicode character set. All keywords, separators, operators, identifiers and primtive literals are formed from ASCII characters. Comments can contain non-ASCII Unicode characters.
+
+\section{Line Termination}
+Line terminators can be the ASCII \verb!LF! character, the ASCII \verb!CR! character, or the ASCII \verb!CR! character followed by the ASCII \verb!LF! character. The \verb!CRLF! combination is therefore considered being one line terminator.
+
+\section{Whitespace}
+Space and horizontal tab (ASCII characters \verb!SP! and \verb!HT!) are considered whitespace and are of no consequence, except as delimiters to certain keywords.
+
+\section{Case Sensitivity}
+Cobalt is case-sensitive in all aspects.
+
+\section{Comments}
+Cobalt supports end of line comments: All text from the ASCII characters \verb!//! to the end of the line is ignored.
+
+\section{Identifiers}
+Identifiers can contain any letter (a-z and A-Z / ASCII codes 97-122 and 65-90) or digit (0-9 / ASCII codes 48 to 57), as well as underscores (\verb!_! / ASCII code 95), but have to start with a letter. See listing \ref{ebnf:identifier} for a formal grammar definition for identifiers.
+
+\begin{lstlisting}[label={ebnf:identifier},caption={Identifier Grammar}]
+identifier = letter, { letter | digit | "_" } ;
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+       | "x" | "y" | "z" ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+\end{lstlisting}
+
+\section{Keywords}
+The following multi-letter words are reserved keywords in Cobalt: \verb!bool!, \verb!int!, \verb!float!, \verb!true!, \verb!false!, \verb!stdin!, \verb!stdout!, \verb!def!
+
+\chapter{Primitive Types}
+
+\section{The Boolean Type}
+The boolean type is specified by using the \verb!bool! keyword. Boolean values can be \verb!true! or \verb!false!.
+
+\section{Number Types}
+Cobalt has integer and floating point types. The minus sign for negative numbers is written using the tilde character (\verb!~!).
+
+\subsection{The Integer Type}
+The integer type is specified by using the \verb!int! keyword. Integer values are 32-bit signed two's-complement integers: \verb!-2147483648! to \verb!2147483647!, inclusive.
+
+\subsection{The Float Type}
+The floating point number type associated with single-precision 32-bit values is specified using the \verb!float! keyword.
+
+\section{Literals}
+Listing \ref{ebnf:literals} gives a grammar of all possible literal values.
+
+\begin{lstlisting}[label={ebnf:literals},caption={Literals Grammar}]
+literal = integer | float | "true" | "false" ;
+integer = ["~"] , digit , { digit } ;
+float = ["~"] , digit , { digit } , "." , digit , { digit };
+\end{lstlisting}
+
+\chapter{Operators}\label{operators}
+Cobalt has unary and binary operators. Cobalt expressions are written in infix notation, meaning that binary operators are placed between operands.
+
+\section{Logical Operators}
+Logical operators operate on boolean operands and evaluate to a boolean value.
+
+\subsection{Unary Logical Operators}
+Cobalt has the following unary logical operators:
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|c|c|c|X|}
+    \hline
+    \textbf{Operator} & \textbf{Operand} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
+    ! & bool & bool & Negates a boolean value. \\ \hline
+  \end{tabularx}
+\end{center}
+
+
+\subsection{Binary Logical Operators}
+Cobalt has the following binary logical operators:
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|c|c|c|X|}
+    \hline
+    \textbf{Operator} & \textbf{Operands} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
+    \verb|&| & bool*bool & bool & Compares two boolean values and evaluates to true if both are true. \\ \hline
+    \texttt{|} & bool*bool & bool & Compares two boolean values and evaluates to true if at least one of them is true. \\ \hline
+  \end{tabularx}
+\end{center}
+
+\pagebreak
+
+\section{Comparison Operators}
+Comparison operators operate on number types, and evaluate to boolean values. Cobalt has the following comparison operators:
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|c|c|c|X|}
+    \hline
+    \textbf{Operator} & \textbf{Operands} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
+    == & number*number & bool & Compares two numbers and evaluates to true if they are equal. \\ \hline
+    != & number*number & bool & Compares two numbers and evaluates to true if they are not equal. \\ \hline
+    \verb|<| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is strictly smaller than the right-side operand. \\ \hline
+    \verb|<=| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is smaller or equal to the right-side operand. \\ \hline
+    \verb|>| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is strictly greater than the right-side operand. \\ \hline
+    \verb|>=| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is greater or equal to the right-side operand. \\ \hline
+  \end{tabularx}
+\end{center}
+
+\pagebreak
+
+\section{Arithmetic Operators}
+Arithmetic operators operate on and evaluate to number values. Cobalt has the following comparison operators:
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|c|c|c|X|}
+    \hline
+    \textbf{Operator} & \textbf{Operands} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
+    + & int*int & int & Adds two integers. \\ \hline
+    + & float*float & float & Adds two floating point numbers. \\ \hline
+    - & int*int & int & Substracts two integers. \\ \hline
+    - & float*float & float & Substracts two floating point numbers. \\ \hline
+    * & int*int & int & Multiplies two integers. \\ \hline
+    * & float*float & float & Multiplies two floating point numbers. \\ \hline
+    / & int*int & int & Divides two integers and evaluates to a floating point number. \\ \hline
+    / & float*float & float & Divides two floating point numbers. \\ \hline
+  \end{tabularx}
+\end{center}
+
+\subsection{Division}
+Note that a division always evaluates to a floating point number. When attempting to divide by 0 during execution, the program execution should abort.
+
+\chapter{Expressions}\label{expressions}
+Expressions may contain literal values, variables, operators and parentheses, and evaluate to a single value and type. The listing \ref{ebnf:expressions} contains a grammatical definition of expressions.
+
+\begin{lstlisting}[label={ebnf:expressions},caption={Expressions Grammar}]
+expression = ["!"] , term { ("&" | "|") , ["!"] , term } ;
+term = sum { comparison operator , sum } ;
+sum = product { ("+" | "-") , product } ;
+product = factor { ("*" | "/") , factor } ;
+factor = literal | identifier | "(" expression ")" ;
+\end{lstlisting}
+
+\section{Evaluation Order}
+When an expression of the form \texttt{operand operator operand} is evaluated, the left operand is evaluated first, then the right one, and finally the expression as a whole is evaluated. The type that the expression evaluates to depends on the operator, see section \ref{operators}.
+
+\section{Operator Precedence}
+The following table lists operators in order of highest to lowest precedence:
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|X|X|}
+    \hline
+    \textbf{Operator Type} & \textbf{Operators} \\ \hline
+    negative number sign & \verb|~| \\ \hline
+    multiplicative arithmetic & \verb|*|, \verb|/| \\ \hline
+    additive arithmetic & \verb|+|, \verb|-| \\ \hline
+    comparison & \verb|==|, \verb|!=|, \verb|>|, \verb|>=|, \verb|<|, \verb|<=| \\ \hline
+    unary logical & \verb|!| \\ \hline
+    binary logical & \verb|&|, \texttt{|} \\ \hline
+  \end{tabularx}
+\end{center}
+
+\chapter{Variables}
+
+\section{Declaration}
+Variables are declared using the \verb!def! definition keyword, followed by an identifier, the \verb!:! type setting operator and optionally a type keyword. This can optionally be followed by the \verb!=! assignement operator and an expression. The statement is then closed wiht a semicolon. The matching grammar definition can be seen in listing \ref{ebnf:vardeclaration}.
+
+\begin{lstlisting}[label={ebnf:vardeclaration},caption={Variable Declaration Grammar}]
+variable declaration = "def" , identifier , ":" , 
+	(type [, "=" , expression] | "=" , expression) , ";" ;
+\end{lstlisting}
+
+\subsection{Variable Type}
+A variable always has an associated type, which is determined at declaration. The variable type can be explicitely declared with a type keyword, or inferred from an assigned expression. In the case of inference, the type of the expression is first determined, and then assigned to the variable. For more information on expression type, see section \ref{expressions}. If both an explicit type keyword and an expression are used when declaring a variable, the type of the expression needs to match the explicitely declared type of the variable.
+
+\section{Assignment}
+An already declared variable can be assigned a value. If the variable already had a value, it is replaced. An assignment starts with the variable name, followed by the \verb!:=! assignment operator and an expression. The matching grammar definition can be seen in listing \ref{ebnf:assignment}.
+
+\begin{lstlisting}[label={ebnf:assignment},caption={Variable Assignment Grammar}]
+assignment = identifier , ":=" , expression , ";" ;
+\end{lstlisting}
+
+\section{Scope}
+When a variable is declared, it is declared inside the local scope. It will not be accessible from superordinate scopes. If a variable of the same name is declared in a superordinate scope, the local variable will overshadow the variable of the superordinate scope. Two variables of the same name can therefore exist in different hierarchical scopes, and hold different values. A variable can't be declared, if a variable of the same name has already been declared in the local scope.
+
+\subsection{Program Scope}
+A Cobalt program has a \verb!program scope! as highest scope. It can have any number of nested subordinate scopes. Any variable declared is declared in a scope, which is the program scope if is not declared in a subordinate scope.
+
+\section{Usage}
+
+\subsection{Lookup}
+A variable needs to be declared in the local or a superordinate scope in order to be used. When a variable is used, it will first be looked up in the local scope. If no variable of that name exists in the checked scope, it will be looked up in the next superordinate scope, until the program scope is reached. If it is not found at all, compilation should fail.
+
+\subsection{Value}
+A variable needs to be assigned a value in order to be used. When attempting to use a variable that has no assigned value, compilation should fail.
+
+\chapter{Input/Output}
+Cobalt only supports simple standard input/output of single values through the \verb!stdin! and \verb!stdout! keywords. Depending on the platform being targeted, a compiler needs to appropriately translate these.
+
+\section{Input}
+An input statement consists of the \verb!stdin! keyword followed by a variable identifier. It is attempted to read a value of the type of that variable from standard input. On success, the varible is set to that value. On fail, program execution should abort. The matching grammar definition can be seen in listing \ref{ebnf:input}.
+
+\begin{lstlisting}[label={ebnf:input},caption={Input Statement Grammar}]
+input = "stdin" , identifier , ";" ;
+\end{lstlisting}
+
+\section{Output}
+An output statement consists of the \verb!stdout! keyword followed by an expression. The value the expression evaluates to is written to standard output. The matching grammar definition can be seen in listing \ref{ebnf:output}.
+
+\begin{lstlisting}[label={ebnf:output},caption={Output Statement Grammar}]
+output = "stdout" , expression , ";" ;
+\end{lstlisting}
+
+% --- Appendix ---
+
+\appendix
+\renewcommand\appendixtocname{Appendix}
+\renewcommand\appendixpagename{Appendix}
+\begin{appendices}
+\renewcommand\thechapter{\appendixname\space\Alph{chapter}}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+\chapter{Full Grammar}\label{app:fullgrammar}
+A full grammar definition of Cobalt 0.1.0 can be found in the following listing \ref{ebnf:full}.
+\begin{lstlisting}[label={ebnf:full},caption={Literals Grammar}]
+program = { statement } ;
+ 
+statement = variable declaration | assignment | input | output ;
+ 
+variable declaration = "def" , identifier , ":" , 
+	(type [, "=" , expression] | "=" , expression) , ";" ;
+assignment = identifier , ":=" , expression , ";" ;
+input = "stdin" , identifier , ";" ;
+output = "stdout" , expression , ";" ;
+ 
+expression = ["!"] , term { ("&" | "|") , ["!"] , term } ;
+term = sum { comparison operator , sum } ;
+sum = product { ("+" | "-") , product } ;
+product = factor { ("*" | "/") , factor } ;
+factor = literal | identifier | "(" expression ")" ;
+comparison operator = "==" | "!=" | ">" | "<" | ">=" | "<=";
+ 
+identifier = letter, { letter | digit | "_" } ;
+type = "int" | "bool" ;
+ 
+literal = integer | float | "true" | "false" ;
+integer = ["~"] , digit , { digit } ;
+float = ["~"] , digit , { digit } , "." , digit , { digit };
+
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+       | "x" | "y" | "z" ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+\end{lstlisting}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}   
+\end{appendices}
+
+\end{document}
