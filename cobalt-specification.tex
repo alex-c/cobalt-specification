@@ -101,7 +101,7 @@ The integer type is specified by using the \verb!int! keyword. Integer values ar
 The floating point number type associated with single-precision 32-bit values is specified using the \verb!float! keyword.
 
 \section{Literals}
-Listing \ref{ebnf:literals} gives a grammar of all possible literal values.
+Listing \ref{ebnf:literals} gives a grammar of all possible literal values. Note that \verb!.0! and \verb!0.! are not valid floating point literals according to this definition, as at least one digit is expected both before and after the dot.
 
 \begin{lstlisting}[label={ebnf:literals},caption={Literals Grammar}]
 literal = integer | float | "true" | "false" ;
