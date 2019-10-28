@@ -55,7 +55,7 @@ In order to define the lexical and syntactic structure of a Cobalt program, cont
 \section{Unicode}
 Cobalt programs are written using the Unicode character set. All keywords, separators, operators, identifiers and primtive literals are formed from ASCII characters. Comments can contain non-ASCII Unicode characters.
 
-\section{Line Termination}
+\section{Line Termination}\label{line_termination}
 Line terminators can be the ASCII \verb!LF! character, the ASCII \verb!CR! character, or the ASCII \verb!CR! character followed by the ASCII \verb!LF! character. The \verb!CRLF! combination is therefore considered being one line terminator.
 
 \section{Whitespace}
@@ -65,7 +65,7 @@ Space and horizontal tab (ASCII characters \verb!SP! and \verb!HT!) are consider
 Cobalt is case-sensitive in all aspects.
 
 \section{Comments}
-Cobalt supports end of line comments: All text from the ASCII characters \verb!//! to the end of the line is ignored.
+Cobalt supports end of line comments: All text from the ASCII characters \verb!//! to the end of the line is ignored. This means that an end of line comment needs to be terminated by any of the allowed line terminators (see section \ref{line_termination}).
 
 \section{Identifiers}
 Identifiers can contain any letter (a-z and A-Z / ASCII codes 97-122 and 65-90) or digit (0-9 / ASCII codes 48 to 57), as well as underscores (\verb!_! / ASCII code 95), but have to start with a letter. See listing \ref{ebnf:identifier} for a formal grammar definition for identifiers.
