@@ -146,8 +146,10 @@ Comparison operators operate on number types, and evaluate to boolean values. Co
   \begin{tabularx}{\textwidth}{|c|c|c|X|}
     \hline
     \textbf{Operator} & \textbf{Operands} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
-    == & number*number & bool & Compares two numbers and evaluates to true if they are equal. \\ \hline
-    != & number*number & bool & Compares two numbers and evaluates to true if they are not equal. \\ \hline
+    == & number*number & bool & Compares two numbers or booleans \\
+    & bool*bool & & and evaluates to true if they are equal. \\ \hline
+    != & number*number & bool & Compares two numbers or booleans \\
+    & bool*bool & & and evaluates to true if they are not equal. \\ \hline
     \verb|<| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is strictly smaller than the right-side operand. \\ \hline
     \verb|<=| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is smaller or equal to the right-side operand. \\ \hline
     \verb|>| & number*number & bool & Compares two numbers and evaluates to true if the left-side operand is strictly greater than the right-side operand. \\ \hline
@@ -164,19 +166,12 @@ Arithmetic operators operate on and evaluate to number values. Cobalt has the fo
   \begin{tabularx}{\textwidth}{|c|c|c|X|}
     \hline
     \textbf{Operator} & \textbf{Operands} & \textbf{Evaluates to} & \textbf{Description} \\ \hline
-    + & int*int & int & Adds two integers. \\ \hline
-    + & float*float & float & Adds two floating point numbers. \\ \hline
-    - & int*int & int & Substracts two integers. \\ \hline
-    - & float*float & float & Substracts two floating point numbers. \\ \hline
-    * & int*int & int & Multiplies two integers. \\ \hline
-    * & float*float & float & Multiplies two floating point numbers. \\ \hline
-    / & int*int & int & Divides two integers and evaluates to a floating point number. \\ \hline
-    / & float*float & float & Divides two floating point numbers. \\ \hline
+    +, -, * & int*int & int & An addition, substraction or multiplication of two integers evaluates to an integer. \\ \hline
+    +, -, * & number*float & float & With one or more floating point \\
+      & float*number & & numbers, an addition, substraction or multiplication evaluates to a floating point number. \\ \hline
+    / & number*number & float & Divisions always evaluate to floating point numbers. \\ \hline
   \end{tabularx}
 \end{center}
-
-\subsection{Division}
-Note that a division always evaluates to a floating point number. When attempting to divide by 0 during execution, the program execution should abort.
 
 \chapter{Expressions}\label{expressions}
 Expressions may contain literal values, variables, operators and parentheses, and evaluate to a single value and type. The listing \ref{ebnf:expressions} contains a grammatical definition of expressions.
