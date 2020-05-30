@@ -13,10 +13,6 @@
 % Formatting: Title font
 \setkomafont{disposition}{\normalcolor\bfseries}
 
-% Formatting: Chapter titles
-\usepackage{titlesec}
-\titleformat{\chapter}{\huge\normalfont\bfseries}{\thechapter.}{1em}{}
-
 % Formatting: Code
 \usepackage{listings}
 \lstset{
@@ -70,6 +66,7 @@ Cobalt supports end of line comments: All text from the ASCII characters \verb!/
 \section{Identifiers}
 Identifiers can contain any letter (a-z and A-Z / ASCII codes 97-122 and 65-90) or digit (0-9 / ASCII codes 48 to 57), as well as underscores (\verb!_! / ASCII code 95), but have to start with a letter. See listing \ref{ebnf:identifier} for a formal grammar definition for identifiers.
 
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[label={ebnf:identifier},caption={Identifier Grammar}]
 identifier = letter, { letter | digit | "_" } ;
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
@@ -82,6 +79,7 @@ letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "x" | "y" | "z" ;
 digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 \end{lstlisting}
+\end{minipage}
 
 \section{Keywords}
 The following multi-letter words are reserved keywords in Cobalt: \verb!bool!, \verb!int!, \verb!float!, \verb!true!, \verb!false!, \verb!stdin!, \verb!stdout!, \verb!def!
